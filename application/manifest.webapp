@@ -3,7 +3,7 @@
   "description": "Telegram Web App.\nMore info & source code here: https://github.com/zhukov/webogram",
   "version": "0.7.0",
   "type": "privileged",
-    "fullscreen": true,
+  "fullscreen": true,
   "launch_path": "/index.html",
   "developer": {
     "name": "Igor Zhukov",
@@ -11,23 +11,25 @@
   },
 
 
-	"desktop-notification":{},
-	"alarms": {
-		"description": "Required to schedule alarms"
-	},
-
+	
     	
   "installs_allowed_from": [
     "*"
   ],
-  "messages": [{
-    "push": "/index.html"
-  }, {
-    "push-register": "/index.html"
-  }, {
-    "notification": "/index.html"
-  }],
+    "messages": [
+     { "alarm": "/index.html" }
+  ],
+
+  
+
   "permissions": {
+
+
+	"alarms":{},
+	"wake-lock":{},
+	"power":{},
+
+
     "desktop-notification": {
       "description": "Required to show new message notifications"
     },
