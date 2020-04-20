@@ -89,7 +89,7 @@ function screenWakeLock(param1) {
 //alarm listener
 navigator.mozSetMessageHandler("alarm", function(mozAlarm) {
     remove_alarms();
-    setAlarm("10");
+    setAlarm("30");
 
 });
 
