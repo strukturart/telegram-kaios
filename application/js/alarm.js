@@ -61,35 +61,13 @@ function toaster(text, time) {
 }
 
 
-//wake up screen
-function screenWakeLock(param1) {
-    if (param1 == "lock") {
-        lock = window.navigator.requestWakeLock("screen");
-
-        lock.onsuccess = function() {
-            toaster("screen-lock", 10000);
-
-        };
-
-        lock.onerror = function() {
-            alert("An error occurred: " + this.error.name);
-        };
-    }
-
-    if (param1 == "unlock") {
-        if (lock.topic == "screen") {
-            lock.unlock();
-        }
-    }
-}
-
 
 
 
 //alarm listener
 navigator.mozSetMessageHandler("alarm", function(mozAlarm) {
     remove_alarms();
-    setAlarm("30");
+    setAlarm("10");
 
 });
 
@@ -157,7 +135,6 @@ function getAlarm() {
     request.onsuccess = function() {
         alert(navigator.mozHasPendingMessage("alarm"))
 
-        screenWakeLock('lock')
 
         this.result.forEach(function(alarm) {
             console.log('Id: ' + alarm.id);
@@ -172,41 +149,3 @@ function getAlarm() {
     };
 
 }
-
-
-//////////////////////////
-////KEYPAD TRIGGER////////////
-/////////////////////////
-
-
-
-function handleKeyDown(evt) {
-
-    switch (evt.key) {
-
-
-
-
-
-
-        case '1':
-            getAlarm();
-            notify("alarm", "Start", false, false);
-
-            break;
-
-        case '2':
-            setAlarm("10");
-            break;
-
-
-
-
-
-    }
-
-};
-
-
-
-document.addEventListener('keydown', handleKeyDown);

@@ -25,10 +25,9 @@
   "permissions": {
 
 
-	"alarms":{},
-	"wake-lock":{},
-	"power":{},
-
+	  "alarms":{
+      
+    },
 
     "desktop-notification": {
       "description": "Required to show new message notifications"

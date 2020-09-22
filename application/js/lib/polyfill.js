@@ -104,38 +104,19 @@ if (!Function.prototype.bind) {
 
 /* setZeroTimeout polyfill, from http://dbaron.org/log/20100309-faster-timeouts */
 (function (global) {
+  var timeouts = []
   var messageName = 'zero-timeout-message'
-  var originalSetTimeout = global.setTimeout
-  var originalClearTimeout = global.clearTimeout
-
-  var originalMinId = originalSetTimeout(function () {}, 0)
-  var zeroTimeouts = []
-  var zeroMinId = originalMinId + 100000000
 
   function setZeroTimeout (fn) {
-    var timeoutId = ++zeroMinId
-    zeroTimeouts.push([timeoutId, fn])
+    timeouts.push(fn)
     global.postMessage(messageName, '*')
-    return timeoutId
-  }
-
-  function clearZeroTimeout(timeoutId) {
-    if (timeoutId && timeoutId >= zeroMinId) {
-      for (var i = 0, len = zeroTimeouts.length; i < len; i++) {
-        if (zeroTimeouts[i][0] == timeoutId) {
-          console.warn('spliced timeout', timeoutId, i)
-          zeroTimeouts.splice(i, 1)
-          break
-        }
-      }
-    }
   }
 
   function handleMessage (event) {
     if (event.source == global && event.data == messageName) {
       event.stopPropagation()
-      if (zeroTimeouts.length > 0) {
-        var fn = zeroTimeouts.shift()[1]
+      if (timeouts.length > 0) {
+        var fn = timeouts.shift()
         fn()
       }
     }
@@ -143,18 +124,12 @@ if (!Function.prototype.bind) {
 
   global.addEventListener('message', handleMessage, true)
 
+  var originalSetTimeout = global.setTimeout
   global.setTimeout = function (callback, delay) {
     if (!delay || delay <= 5) {
       return setZeroTimeout(callback)
     }
     return originalSetTimeout(callback, delay)
-  }
-
-  global.clearTimeout = function (timeoutId) {
-    if (timeoutId >= zeroMinId) {
-      clearZeroTimeout(timeoutId)
-    }
-    return originalClearTimeout(timeoutId)
   }
 
   global.setZeroTimeout = setZeroTimeout

@@ -1,3 +1,7 @@
 div.im_dialog_photo {
     display: none;
 }
+
+div.im_dialog_photo pull-left peer_photo_init {
+    display: none!Important;
+}
